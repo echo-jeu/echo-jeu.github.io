@@ -10,7 +10,7 @@ Il faut trouver la sortie de chaque niveau sans se faire prendre. Jeu sonore (ca
 - Joueurs mobiles qui cherchent un « jeu de labyrinthe dans le noir » (requête SEO visée), en 7 langues.
 - Joueurs qui jouent à l'oreille : mode audio et annonces vocales.
 - Communauté du stream d'Aulit42369 (Défi du jour commun aux 4 jeux).
-- Profil précis (âge, pays) : à confirmer par Olivier.
+- Profil estimé : 12 ans et plus, surtout France et pays francophones (Belgique, Suisse, Canada), le reste du monde via les 7 langues du jeu (proposé par Claude le 29/10/2026, à corriger si besoin).
 
 ## Fonctions (présentes dans le code)
 | Fonction | Détail |
