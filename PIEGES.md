@@ -8,9 +8,9 @@
 - **Retour Android et panneau « autres jeux »** : le panneau ajoute sa propre entrée d'historique ; le jeu ignore `popstate` sur l'accueil, donc pas de conflit. Ne pas l'ouvrir hors de l'accueil.
 - **Service worker en « cache d'abord »** pour tout sauf la page : un fichier ajouté (comme `defi.js`) doit être dans `FILES`
   **et** `VERSION` doit changer, sinon les joueurs installés gardent l'ancien fichier ou cassent hors ligne.
-- **`404.html` est servie à n'importe quelle profondeur** (`/Echo/a/b/c`) : tous ses liens, polices et icônes en chemin absolu (`/Echo/…`), jamais relatif. Elle n'est pas mise en cache par le SW.
-- **Aperçus de liens** : `og:image` doit rester une URL absolue (`https://aulit42369.github.io/Echo/og-image.png`) ; après modification de l'image, Facebook/Discord gardent l'ancienne en cache plusieurs jours.
-- **`robots.txt`** ne peut pas vivre dans ce dépôt (site de projet) : seul `sitemap.xml` est publié.
+- **`404.html` est servie à n'importe quelle profondeur** (`/a/b/c`) : tous ses liens, polices et icônes en chemin absolu (`/…`), jamais relatif. Elle n'est pas mise en cache par le SW.
+- **Aperçus de liens** : `og:image` doit rester une URL absolue (`https://echo-jeu.github.io/og-image.png`) ; après modification de l'image, Facebook/Discord gardent l'ancienne en cache plusieurs jours.
+- **Ancienne adresse `aulit42369.github.io/Echo/`** (29/10) : le dépôt `Aulit42369/Echo` (remote `ancien`, branche `demenagement`) ne sert plus qu'à rediriger. Son `sw.js` ne doit supprimer **que** les caches `echo-` (origine partagée avec le Site et Cra). Ne plus jamais y pousser le jeu : `git push` va sur `origin` = echo-jeu.
 - **`node --test tests/`** échoue sous Node 24 : lancer `node --test` à la racine.
 - **Clavier et panneaux HTML** : le gestionnaire `keydown` global ignore les touches dont la cible est dans `#defiFin`, `#autres` ou `#autresBtn`,
   sinon Entrée/Espace sur le bouton « Partager » renverrait aussi au menu.
@@ -36,7 +36,7 @@
 
 ## Identités d'appli (manifest `id`) — NE JAMAIS CHANGER (29/10)
 Chrome identifie une PWA installée par son `id` ; en changer = une autre appli, l'ancienne reste orpheline. Valeurs en ligne des 5 apps :
-ÉCHO `/Echo/` (aulit42369.github.io/Echo/) · LUMEN `/` (lumen-jeu.github.io) · Fragments `/fragments/` (fragments-jeu.github.io, volontairement différent de `/`) · Résonance `/` (resonance-jeu.github.io) · CRA `/Cra/` (cra-aulit.github.io/Cra/).
+ÉCHO `/` (echo-jeu.github.io depuis le 29/10 ; avant : `/Echo/` sur aulit42369.github.io) · LUMEN `/` (lumen-jeu.github.io) · Fragments `/fragments/` (fragments-jeu.github.io, volontairement différent de `/`) · Résonance `/` (resonance-jeu.github.io) · CRA `/Cra/` (cra-aulit.github.io/Cra/).
 `tests/manifest-sw.test.js` (identique dans les 5 projets) fige ces valeurs : si tu le modifies, copie-le à l'identique dans les 4 autres.
 
 - **Zoom** : le viewport n'interdit plus le zoom (accessibilité) ; c'est `touch-action: none` sur le canvas qui empêche le pincement pendant le jeu. Ne pas le retirer.

@@ -24,9 +24,9 @@ function vecteurs() {
     }),
     fnv: ['', 'echo', 'ÉCHO', 'echo:2026-10-24', '日本語🦇'].map(s => [s, Defi.fnv1a(s)]),
     partages: [
-      { nom: 'ÉCHO', n: 24, emoji: '🦇', score: '7 420', lignes: Defi.grid([1, 1, 0], ['▫️', '💎']), detail: '⏱ 1:42 · 7 échos', serie: 4, libelleSerie: '{0} jours de suite', url: 'https://aulit42369.github.io/Echo/' },
-      { nom: 'ÉCHO', n: 1, emoji: '🦇', score: '0', lignes: Defi.grid([0, 0, 0], ['▫️', '💎']), detail: '⏱ 9:59 · 40 echoes', serie: 1, libelleSerie: '{0} days in a row', url: 'https://aulit42369.github.io/Echo/?x=1#y' },
-      { nom: 'ÉCHO', n: 400, emoji: '🦇', score: '12 000', lignes: ['💎'.repeat(10), '💎'.repeat(10), '💎'.repeat(10), '💎'.repeat(10), '💎'.repeat(10)], detail: 'x'.repeat(120), serie: 12, libelleSerie: '{0}日連続', url: 'https://aulit42369.github.io/Echo/' },
+      { nom: 'ÉCHO', n: 24, emoji: '🦇', score: '7 420', lignes: Defi.grid([1, 1, 0], ['▫️', '💎']), detail: '⏱ 1:42 · 7 échos', serie: 4, libelleSerie: '{0} jours de suite', url: 'https://echo-jeu.github.io/' },
+      { nom: 'ÉCHO', n: 1, emoji: '🦇', score: '0', lignes: Defi.grid([0, 0, 0], ['▫️', '💎']), detail: '⏱ 9:59 · 40 echoes', serie: 1, libelleSerie: '{0} days in a row', url: 'https://echo-jeu.github.io/?x=1#y' },
+      { nom: 'ÉCHO', n: 400, emoji: '🦇', score: '12 000', lignes: ['💎'.repeat(10), '💎'.repeat(10), '💎'.repeat(10), '💎'.repeat(10), '💎'.repeat(10)], detail: 'x'.repeat(120), serie: 12, libelleSerie: '{0}日連続', url: 'https://echo-jeu.github.io/' },
     ].map(o => ({ o, texte: Defi.shareText(o) })),
   };
 }

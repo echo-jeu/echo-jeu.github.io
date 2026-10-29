@@ -22,8 +22,8 @@ const CLES_DEFI = ['defiAFaire', 'defiFait', 'defiSerie', 'defiSerieTxt', 'defiP
 function textesDefi() { const T = textes(); return Object.fromEntries(CLES_DEFI.map(k => [k, T[k]])); }
 const nbLangues = (html.match(/"langs":\[(.*?)\]/)[1].match(/"code"/g) || []).length;
 
-test('service worker : version echo-v2.5, modules en cache', () => {
-  assert.match(sw, /const VERSION = 'echo-v2.5';/);
+test('service worker : version echo-v2.6, modules en cache', () => {
+  assert.match(sw, /const VERSION = 'echo-v2.6';/);
   for (const f of ['defi.js', 'share-card.js', 'autres-jeux.js']) {
     assert.ok(sw.includes("'./" + f + "'"), f + ' en cache');
     assert.ok(html.includes('<script src="' + f + '"></script>'), f + ' chargé');
@@ -36,7 +36,7 @@ test('graine et date du défi : module commun, heure de Paris', () => {
   assert.ok(html.includes("Defi.seed('echo', defiJour.key)"));
   assert.ok(html.includes("store.get('daily_' + defiJour.num, 0)"), 'clé de record existante echo_daily_AAAAMMJJ conservée');
   assert.ok(html.includes("Defi.record('echo', defiJour"));
-  assert.ok(html.includes("const URL_JEU = 'https://aulit42369.github.io/Echo/';"));
+  assert.ok(html.includes("const URL_JEU = 'https://echo-jeu.github.io/';"));
   assert.ok(!html.includes('location.href'));
   // même graine pour une date donnée, quel que soit le moment de la journée à Paris
   const a = Defi.seed('echo', Defi.today('2026-10-24T00:30:00+02:00').key);
@@ -63,8 +63,8 @@ test('texte partagé ÉCHO (format de la spécification)', () => {
   const L = (k, ...a) => a.reduce((r, v, i) => r.split('{' + i + '}').join(String(v)), T[k][0]);
   const texte = Defi.shareText({ nom: 'ÉCHO', n: 24, emoji: '🦇', score: '7 420',
     lignes: Defi.grid([1, 1, 0, 1, 0], ['▫️', '💎']), detail: L('defiDetail', '1:42', 7),
-    serie: 4, libelleSerie: L('defiSerieTxt'), url: 'https://aulit42369.github.io/Echo/' });
-  assert.equal(texte, 'ÉCHO #24 🦇 7 420\n💎💎▫️💎▫️\n⏱ 1:42 · 7 échos\n🔥 4 jours de suite\nhttps://aulit42369.github.io/Echo/');
+    serie: 4, libelleSerie: L('defiSerieTxt'), url: 'https://echo-jeu.github.io/' });
+  assert.equal(texte, 'ÉCHO #24 🦇 7 420\n💎💎▫️💎▫️\n⏱ 1:42 · 7 échos\n🔥 4 jours de suite\nhttps://echo-jeu.github.io/');
 });
 
 test('accessibilité du panneau de fin', () => {

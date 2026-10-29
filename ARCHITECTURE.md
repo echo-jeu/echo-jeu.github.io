@@ -48,7 +48,7 @@ Résultat : `GameView.kt` 325 l. + 13 fichiers de 48 à 344 l. (détail dans le 
 | `autres-jeux.js` | pastille « AUTRES JEUX » (accueil seulement) + panneau `role=dialog` des 3 autres jeux ; constante `JEUX` (liens web, à remplacer par les liens Play Store) ; Échap et retour Android ferment le panneau | ≈ 115 l. |
 | `sw.js` | cache hors ligne (liste `JEU` = mêmes fichiers `js/` que les balises de `index.html`) | 39 l. |
 | `privacy.html` | confidentialité + conditions d'utilisation + mentions légales (7 langues, choix par `#xx` ou langue du navigateur) ; URL donnée au Play Store, ne pas renommer | |
-| `404.html` | page introuvable (chemins absolus `/Echo/…`, retour auto au jeu) | |
+| `404.html` | page introuvable (chemins absolus `/…`, retour auto au jeu) | |
 | `sitemap.xml`, `og-image.png` | référencement, image d'aperçu des liens 1200×630 | |
 | `tests/defi.test.js` | module commun (copie identique dans les 4 jeux, sauf la ligne `CHEMIN`) | |
 | `tests/echo-defi.test.js` | intégration propre à ÉCHO (contrôles statiques, textes, format du partage) | |
@@ -86,8 +86,8 @@ Survit aux mises à jour (rien n'est migré ni effacé). Lecture défensive : do
 Aucun secret, aucun réseau, aucune donnée personnelle. Le texte partagé ne contient que numéro, score, grille, temps, série et l'URL fixe (sans paramètre).
 
 ## 5. Identité
-- URL : `https://aulit42369.github.io/Echo/` (**écart connu** : domaine partagé, contraire à la règle « un domaine par app » ; ne pas changer sans décision).
-- `id` du manifest : `/Echo/` — **ne jamais modifier**. `start_url` / `scope` : `./`.
+- URL : `https://echo-jeu.github.io/` (propre domaine depuis le 29/10/2026, dépôt `echo-jeu/echo-jeu.github.io`, remote `origin`). L'ancienne adresse `aulit42369.github.io/Echo/` (dépôt `Aulit42369/Echo`, remote `ancien`) ne contient plus qu'un renvoi et un service worker qui vide les caches `echo-` puis se désinscrit.
+- `id` du manifest : `/` depuis le déménagement (nouvelle origine = nouvelle appli pour Chrome, inévitable) — **ne plus jamais modifier**. `start_url` / `scope` : `./`.
 - Cache : préfixe `echo-` (actuel `echo-v2.5`) ; le SW ne supprime que les caches `echo-*`.
 - Nom du fichier image partagé : `echo-defi-<n>.png`.
 - Nom de jeu pour la graine du défi : `'echo'`.

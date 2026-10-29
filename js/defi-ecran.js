@@ -5,7 +5,7 @@
 // =====================================================================
 // Défi du jour (logique commune dans defi.js)
 // =====================================================================
-const URL_JEU = 'https://aulit42369.github.io/Echo/';
+const URL_JEU = 'https://echo-jeu.github.io/';
 const calme = matchMedia('(prefers-reduced-motion: reduce)');
 const el = id => document.getElementById(id);
 let accueil = null, defiSt = { count: 0, best: 0 }, defiTexte = '';

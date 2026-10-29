@@ -34,8 +34,8 @@
 - Quand LUMEN / Fragments / Résonance seront sur le Play Store : remplacer les liens de `JEUX` (`autres-jeux.js`) et `AutresJeux.JEUX` (Android).
 - Purger un jour les anciennes clés `echo_daily_*` (une par jour joué).
 
-- **URL de politique dans la Play Console à vérifier** : `PLAY_STORE.md` donnait `…/echo/privacy.html` (minuscule, **404**) — corrigé le 25/10 en `https://aulit42369.github.io/Echo/privacy.html` ; vérifier ce qui est saisi dans la Play Console.
-- `robots.txt` impossible : il devrait être à la racine `aulit42369.github.io/` (aucun dépôt utilisateur) — seul `sitemap.xml` est fourni, à déclarer dans Google Search Console.
+- **URL de politique dans la Play Console à vérifier** : `PLAY_STORE.md` donnait `…/echo/privacy.html` (minuscule, **404**) — corrigé le 25/10, puis le 29/10 en `https://echo-jeu.github.io/privacy.html` ; vérifier ce qui est saisi dans la Play Console.
+- 29/10 : **déménagement vers https://echo-jeu.github.io/** (dépôt `echo-jeu/echo-jeu.github.io`, `robots.txt` ajouté, manifest `id` `/`, cache `echo-v2.6`, GoatCounter `/echo` + chemin) ; ancienne adresse = renvoi + SW de nettoyage. Search Console : propriété `https://echo-jeu.github.io/` + sitemap.
 - Mesure d'audience : vérifier dans le tableau de bord `aulit42369.goatcounter.com` que les visites arrivent sous `/echo/` (quelques minutes après une visite).
 
 ## Décisions prises

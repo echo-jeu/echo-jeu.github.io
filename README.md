@@ -1,7 +1,7 @@
 # ÉCHO — version web (PWA)
 
 Jeu mobile de labyrinthe dans le noir : un écho révèle les murs… et attire les Ombres.
-Publié sur GitHub Pages : https://aulit42369.github.io/Echo/ (7 langues, hors ligne après la première visite).
+Publié sur GitHub Pages : https://echo-jeu.github.io/ (dépôt `echo-jeu/echo-jeu.github.io` ; l'ancienne adresse aulit42369.github.io/Echo/ renvoie ici depuis le 29/10/2026) (7 langues, hors ligne après la première visite).
 
 L'appli Android (Kotlin natif) et la source des traductions (`i18n/strings.json`, `tools/gen_i18n.py`)
 vivent dans `F:\Stream\files\JEUX\Echo-PlayStore-1.1.0\Echo`, pas ici.

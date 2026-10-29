@@ -25,14 +25,14 @@ function fauxCtx() {
   return ctx;
 }
 const DONNEES = { n: 24, kicker: 'DÉFI DU JOUR #24', score: '7 420', eclats: [true, true, false],
-  detail: '⏱ 1:42 · 7 échos', serie: '4 jours de suite', url: 'https://aulit42369.github.io/Echo/' };
+  detail: '⏱ 1:42 · 7 échos', serie: '4 jours de suite', url: 'https://echo-jeu.github.io/' };
 
 test('carte 1080×1920 : nom du jeu, numéro, résultat, série et URL', () => {
   assert.equal(ShareCard.W, 1080); assert.equal(ShareCard.H, 1920);
   const ctx = fauxCtx();
   ShareCard.draw(ctx, DONNEES);
   const s = ctx.textes.map(t => t.s);
-  for (const attendu of ['ÉCHO', 'DÉFI DU JOUR #24', '7 420', '⏱ 1:42 · 7 échos', '4 jours de suite', 'https://aulit42369.github.io/Echo/'])
+  for (const attendu of ['ÉCHO', 'DÉFI DU JOUR #24', '7 420', '⏱ 1:42 · 7 échos', '4 jours de suite', 'https://echo-jeu.github.io/'])
     assert.ok(s.includes(attendu), attendu);
   for (const t of ctx.textes) assert.ok(t.y > 0 && t.y < 1920, 'texte dans la carte : ' + t.s);
   const sansSerie = fauxCtx();

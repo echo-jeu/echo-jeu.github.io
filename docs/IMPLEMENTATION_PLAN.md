@@ -8,7 +8,7 @@
 
 ## Prochaines étapes (d'après `A_FAIRE.md`)
 1. Play Console : vérifier la fiche « Sécurité des données » (aucune donnée collectée ; avis gérés par Google).
-2. Vérifier l'URL de politique saisie dans la Play Console : `https://aulit42369.github.io/Echo/privacy.html`.
+2. Vérifier l'URL de politique saisie dans la Play Console : `https://echo-jeu.github.io/privacy.html`.
 3. Vérifier à l'œil la carte image (web et Android) sur téléphone.
 4. Remplacer les liens de `JEUX` (`autres-jeux.js`) et `AutresJeux.JEUX` (Android) quand les autres jeux seront sur le Play Store.
 5. Purger un jour les anciennes clés `echo_daily_*`.

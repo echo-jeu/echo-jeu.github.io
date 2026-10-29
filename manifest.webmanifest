@@ -3,7 +3,7 @@
   "short_name": "ÉCHO",
   "description": "Jeu de labyrinthe dans le noir : lance un écho pour révéler les murs.",
   "lang": "fr",
-  "id": "/Echo/",
+  "id": "/",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
