@@ -1,6 +1,7 @@
 # ÉCHO (PWA) — à faire
 
 ## Fait
+- 05/11 : `privacy.html` (7 langues) : hébergeur OVH SAS (serveur à Beauharnois, Canada, aucun journal des visites), GitHub Pages en copie de secours ; date au 5 novembre 2026.
 - **05/11/2026 : adresse officielle echo.aulit42369.fr ; github.io en secours ; appli Android à recompiler par Olivier** (cache `echo-v2.7`, empreinte CSP du compteur recalculée, GoatCounter accepte aussi `echo.aulit42369.fr`, liens autres jeux et Site sur aulit42369.fr, `parite-android.json` régénéré et recopié côté Android).
 - 24/10 : Défi du jour unifié avec les 3 autres jeux (`defi.js` commun) : jour qui change à minuit heure de Paris, numéro `#n`,
   graine `Defi.seed('echo', AAAA-MM-JJ)`, série de jours consécutifs (`echo.defi.v1`), sous-ligne d'accueil (`#24 · à faire` / `fait ✓` + flamme),
