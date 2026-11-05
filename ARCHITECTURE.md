@@ -86,9 +86,9 @@ Survit aux mises à jour (rien n'est migré ni effacé). Lecture défensive : do
 Aucun secret, aucun réseau, aucune donnée personnelle. Le texte partagé ne contient que numéro, score, grille, temps, série et l'URL fixe (sans paramètre).
 
 ## 5. Identité
-- URL : `https://echo-jeu.github.io/` (propre domaine depuis le 29/10/2026, dépôt `echo-jeu/echo-jeu.github.io`, remote `origin`). L'ancienne adresse `aulit42369.github.io/Echo/` (dépôt `Aulit42369/Echo`, remote `ancien`) ne contient plus qu'un renvoi et un service worker qui vide les caches `echo-` puis se désinscrit.
+- URL officielle : `https://echo.aulit42369.fr/` depuis le 05/11/2026 (serveur d'Olivier, recopie `main` toutes les 5 min) : canonical, og, JSON-LD, sitemap, partage. `https://echo-jeu.github.io/` reste en ligne en secours (propre domaine depuis le 29/10/2026, dépôt `echo-jeu/echo-jeu.github.io`, remote `origin`). L'ancienne adresse `aulit42369.github.io/Echo/` (dépôt `Aulit42369/Echo`, remote `ancien`) ne contient plus qu'un renvoi et un service worker qui vide les caches `echo-` puis se désinscrit.
 - `id` du manifest : `/` depuis le déménagement (nouvelle origine = nouvelle appli pour Chrome, inévitable) — **ne plus jamais modifier**. `start_url` / `scope` : `./`.
-- Cache : préfixe `echo-` (actuel `echo-v2.5`) ; le SW ne supprime que les caches `echo-*`.
+- Cache : préfixe `echo-` (actuel `echo-v2.7`) ; le SW ne supprime que les caches `echo-*`.
 - Nom du fichier image partagé : `echo-defi-<n>.png`.
 - Nom de jeu pour la graine du défi : `'echo'`.
 
@@ -113,4 +113,4 @@ Manuel : capture accueil + fin du défi (FR/EN), zéro erreur console, hors lign
 - Voir `PIEGES.md`.
 
 ## Statistiques de visite (28/10/2026)
-GoatCounter sans cookie, chemins `/echo/…`, chargé par le script d'une ligne en fin de `index.html` uniquement sur `*.github.io` et sans `skipgc` (détail : `docs/TRD.md`, section Traceurs). `privacy.html` le déclare dans toutes ses langues, avec le bouton « Ne pas être compté ». Test : `tests/statistiques.test.js` (identique dans les 4 jeux, seul `PREFIXE` change).
+GoatCounter sans cookie, chemins `/echo/…`, chargé par le script d'une ligne en fin de `index.html` uniquement sur `*.github.io` ou `echo.aulit42369.fr` et sans `skipgc` (détail : `docs/TRD.md`, section Traceurs). `privacy.html` le déclare dans toutes ses langues, avec le bouton « Ne pas être compté ». Test : `tests/statistiques.test.js` (identique dans les 4 jeux, seul `PREFIXE` change).

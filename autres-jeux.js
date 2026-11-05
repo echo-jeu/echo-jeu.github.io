@@ -7,9 +7,9 @@
   'use strict';
   // Liens web des 3 autres jeux : à remplacer par le lien Play Store quand l'appli sera publiée.
   var JEUX = [
-    { nom: 'LUMEN', cle: 'autresLumen', url: 'https://lumen-jeu.github.io/', couleur: '#ffc94d' },
-    { nom: 'Fragments', cle: 'autresFragments', url: 'https://fragments-jeu.github.io/', couleur: '#c08bff' },
-    { nom: 'Résonance', cle: 'autresResonance', url: 'https://resonance-jeu.github.io/', couleur: '#5cf2ff' },
+    { nom: 'LUMEN', cle: 'autresLumen', url: 'https://lumen.aulit42369.fr/', couleur: '#ffc94d' },
+    { nom: 'Fragments', cle: 'autresFragments', url: 'https://fragments.aulit42369.fr/', couleur: '#c08bff' },
+    { nom: 'Résonance', cle: 'autresResonance', url: 'https://resonance.aulit42369.fr/', couleur: '#5cf2ff' },
   ];
   var CSS = [
     '#autresBtn { position: fixed; top: max(10px, env(safe-area-inset-top)); right: max(10px, env(safe-area-inset-right)); z-index: 2;',

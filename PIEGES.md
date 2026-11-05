@@ -9,7 +9,7 @@
 - **Service worker en « cache d'abord »** pour tout sauf la page : un fichier ajouté (comme `defi.js`) doit être dans `FILES`
   **et** `VERSION` doit changer, sinon les joueurs installés gardent l'ancien fichier ou cassent hors ligne.
 - **`404.html` est servie à n'importe quelle profondeur** (`/a/b/c`) : tous ses liens, polices et icônes en chemin absolu (`/…`), jamais relatif. Elle n'est pas mise en cache par le SW.
-- **Aperçus de liens** : `og:image` doit rester une URL absolue (`https://echo-jeu.github.io/og-image.png`) ; après modification de l'image, Facebook/Discord gardent l'ancienne en cache plusieurs jours.
+- **Aperçus de liens** : `og:image` doit rester une URL absolue (`https://echo.aulit42369.fr/og-image.png` depuis le 05/11) ; après modification de l'image, Facebook/Discord gardent l'ancienne en cache plusieurs jours.
 - **Ancienne adresse `aulit42369.github.io/Echo/`** (29/10) : le dépôt `Aulit42369/Echo` (remote `ancien`, branche `demenagement`) ne sert plus qu'à rediriger. Son `sw.js` ne doit supprimer **que** les caches `echo-` (origine partagée avec le Site et Cra). Ne plus jamais y pousser le jeu : `git push` va sur `origin` = echo-jeu.
 - **`node --test tests/`** échoue sous Node 24 : lancer `node --test` à la racine.
 - **Clavier et panneaux HTML** : le gestionnaire `keydown` global ignore les touches dont la cible est dans `#defiFin`, `#autres` ou `#autresBtn`,
@@ -32,7 +32,7 @@
   voulu fait échouer `tests/geometrie.test.js` → `MAJ_PARITE=1 node --test`, recopier `tests/geometrie-android.json` dans
   `app/src/test/resources/` et porter le changement dans `Geometrie.kt`.
 
-- **Compteur GoatCounter (28/10)** : script en ligne d'une ligne en fin de `index.html`, son empreinte `sha256` est dans la CSP : le modifier = recalculer l'empreinte (`tests/statistiques.test.js`). Ne jamais retirer la garde `github.io` : compter dans une appli Android obligerait à déclarer des analytics sur le Play Store. Garder `count.v4.js` + `integrity` (pas `count.js`), comme le Site.
+- **Compteur GoatCounter (28/10)** : script en ligne d'une ligne en fin de `index.html`, son empreinte `sha256` est dans la CSP : le modifier = recalculer l'empreinte (`tests/statistiques.test.js`). Garde = `github.io` **ou** `echo.aulit42369.fr` (05/11) ; ne jamais la retirer : compter dans une appli Android obligerait à déclarer des analytics sur le Play Store. Garder `count.v4.js` + `integrity` (pas `count.js`), comme le Site.
 
 ## Identités d'appli (manifest `id`) — NE JAMAIS CHANGER (29/10)
 Chrome identifie une PWA installée par son `id` ; en changer = une autre appli, l'ancienne reste orpheline. Valeurs en ligne des 5 apps :

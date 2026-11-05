@@ -67,7 +67,7 @@
 
   /**
    * o = { n, kicker: 'DÉFI DU JOUR #24', score: '7 420', eclats: [true, false, …], detail: '⏱ 1:42 · 7 échos',
-   *       serie: '4 jours de suite' (ou ''), url: 'https://echo-jeu.github.io/' }
+   *       serie: '4 jours de suite' (ou ''), url: 'https://echo.aulit42369.fr/' }
    */
   function draw(ctx, o) {
     ctx.textBaseline = 'alphabetic';

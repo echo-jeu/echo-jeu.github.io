@@ -25,14 +25,14 @@ function fauxCtx() {
   return ctx;
 }
 const DONNEES = { n: 24, kicker: 'DÉFI DU JOUR #24', score: '7 420', eclats: [true, true, false],
-  detail: '⏱ 1:42 · 7 échos', serie: '4 jours de suite', url: 'https://echo-jeu.github.io/' };
+  detail: '⏱ 1:42 · 7 échos', serie: '4 jours de suite', url: 'https://echo.aulit42369.fr/' };
 
 test('carte 1080×1920 : nom du jeu, numéro, résultat, série et URL', () => {
   assert.equal(ShareCard.W, 1080); assert.equal(ShareCard.H, 1920);
   const ctx = fauxCtx();
   ShareCard.draw(ctx, DONNEES);
   const s = ctx.textes.map(t => t.s);
-  for (const attendu of ['ÉCHO', 'DÉFI DU JOUR #24', '7 420', '⏱ 1:42 · 7 échos', '4 jours de suite', 'https://echo-jeu.github.io/'])
+  for (const attendu of ['ÉCHO', 'DÉFI DU JOUR #24', '7 420', '⏱ 1:42 · 7 échos', '4 jours de suite', 'https://echo.aulit42369.fr/'])
     assert.ok(s.includes(attendu), attendu);
   for (const t of ctx.textes) assert.ok(t.y > 0 && t.y < 1920, 'texte dans la carte : ' + t.s);
   const sansSerie = fauxCtx();
@@ -91,9 +91,9 @@ test('index.html : bouton image branché, verrou de partage commun', () => {
 
 test('autres jeux : les 3 autres jeux, liens web exacts, ÉCHO absent', () => {
   assert.deepEqual(AutresJeux.JEUX.map(j => [j.nom, j.url, j.cle]), [
-    ['LUMEN', 'https://lumen-jeu.github.io/', 'autresLumen'],
-    ['Fragments', 'https://fragments-jeu.github.io/', 'autresFragments'],
-    ['Résonance', 'https://resonance-jeu.github.io/', 'autresResonance'],
+    ['LUMEN', 'https://lumen.aulit42369.fr/', 'autresLumen'],
+    ['Fragments', 'https://fragments.aulit42369.fr/', 'autresFragments'],
+    ['Résonance', 'https://resonance.aulit42369.fr/', 'autresResonance'],
   ]);
   const src = fs.readFileSync(path.join(__dirname, '..', 'autres-jeux.js'), 'utf8');
   assert.ok(src.includes('à remplacer par le lien Play Store quand l\'appli sera publiée'));
