@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>ÉCHO · Confidentialité</title>
 <meta name="description" content="Politique de confidentialité, conditions d'utilisation et mentions légales du jeu ÉCHO.">
 <meta name="theme-color" content="#05070a">
@@ -272,45 +273,6 @@
     <p>メール：<a href="mailto:aulit42369@gmail.com">aulit42369@gmail.com</a>、または <a href="https://github.com/echo-jeu/echo-jeu.github.io/issues" rel="noopener">ゲームの GitHub ページ</a>で Issue を作成してください。</p>
   </section>
 </main>
-<script>
-// Affiche la langue choisie (lien #xx) ou celle du navigateur ; toutes les sections restent dans la page.
-(() => {
-  const codes = ['fr', 'en', 'es', 'de', 'it', 'pt', 'ja'];
-  const pick = () => {
-    const h = location.hash.slice(1);
-    if (codes.includes(h)) return h;
-    for (const l of navigator.languages || [navigator.language || 'en']) { const c = String(l).slice(0, 2).toLowerCase(); if (codes.includes(c)) return c; }
-    return 'en';
-  };
-  const show = () => {
-    const c = pick();
-    document.documentElement.lang = c;
-    for (const s of document.querySelectorAll('main > section')) s.hidden = s.id !== c;
-    for (const a of document.querySelectorAll('nav a')) a.setAttribute('aria-current', a.dataset.l === c ? 'true' : 'false');
-  };
-  addEventListener('hashchange', show);
-  show();
-})();
-</script>
-<script>
-// « Ne pas être compté » : GoatCounter ne compte rien quand localStorage.skipgc === 't' (même règle que le Site).
-// Hors web public (echo.aulit42369.fr, github.io) (appli Android, local) le jeu ne compte rien : le bouton est masqué.
-(function () {
-  var web = /(^|\.)github\.io$|^echo\.aulit42369\.fr$/.test(location.hostname);
-  function off() { try { return localStorage.getItem('skipgc') === 't'; } catch (e) { return false; } }
-  function maj() {
-    var i = off() ? 1 : 0;
-    document.querySelectorAll('.gc-choix').forEach(function (el) { el.hidden = !web; });
-    document.querySelectorAll('[data-gc]').forEach(function (b) { b.textContent = b.getAttribute('data-gc').split('|')[i]; b.setAttribute('aria-pressed', String(!!i)); });
-    document.querySelectorAll('[data-gc-etat]').forEach(function (s) { s.textContent = s.getAttribute('data-gc-etat').split('|')[i]; });
-  }
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('[data-gc]')) return;
-    try { if (off()) localStorage.removeItem('skipgc'); else localStorage.setItem('skipgc', 't'); } catch (err) { /* stockage bloqué */ }
-    maj();
-  });
-  maj();
-})();
-</script>
+<script src="js/privacy.js"></script>
 </body>
 </html>

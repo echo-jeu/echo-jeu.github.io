@@ -1,6 +1,7 @@
 # ÉCHO (PWA) — à faire
 
 ## Fait
+- **05/11/2026 : CSP stricte sur toutes les pages** (`index`, `privacy`, `404`) : plus aucun script en ligne (compteur GoatCounter → `js/stats.js`, code de `privacy.html` → `js/privacy.js`), `script-src 'self' https://gc.zgo.at`, `base-uri`/`object-src`/`form-action` `'none'`, `data:`/`blob:` retirés là où rien ne s'en sert ; cache `echo-v2.8` ; `tests/csp.test.js` (commun aux 4 jeux). Vérifié dans Chromium sans tête : 0 violation CSP, 0 erreur JS, GoatCounter envoie bien sur le domaine officiel.
 - 05/11 : `privacy.html` (7 langues) : hébergeur OVH SAS (serveur à Beauharnois, Canada, aucun journal des visites), GitHub Pages en copie de secours ; date au 5 novembre 2026.
 - **05/11/2026 : adresse officielle echo.aulit42369.fr ; github.io en secours ; appli Android à recompiler par Olivier** (cache `echo-v2.7`, empreinte CSP du compteur recalculée, GoatCounter accepte aussi `echo.aulit42369.fr`, liens autres jeux et Site sur aulit42369.fr, `parite-android.json` régénéré et recopié côté Android). Audit légal : `privacy.html` cite la décision d'adéquation UE pour le Canada (2002/2/CE) dans les 7 langues.
 - 24/10 : Défi du jour unifié avec les 3 autres jeux (`defi.js` commun) : jour qui change à minuit heure de Paris, numéro `#n`,

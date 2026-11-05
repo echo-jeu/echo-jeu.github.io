@@ -32,7 +32,7 @@
   voulu fait échouer `tests/geometrie.test.js` → `MAJ_PARITE=1 node --test`, recopier `tests/geometrie-android.json` dans
   `app/src/test/resources/` et porter le changement dans `Geometrie.kt`.
 
-- **Compteur GoatCounter (28/10)** : script en ligne d'une ligne en fin de `index.html`, son empreinte `sha256` est dans la CSP : le modifier = recalculer l'empreinte (`tests/statistiques.test.js`). Garde = `github.io` **ou** `echo.aulit42369.fr` (05/11) ; ne jamais la retirer : compter dans une appli Android obligerait à déclarer des analytics sur le Play Store. Garder `count.v4.js` + `integrity` (pas `count.js`), comme le Site.
+- **Compteur GoatCounter (28/10)** : dans `js/stats.js` (chargé en fin de `index.html`). Depuis le 05/11/2026 **aucun script en ligne** : la CSP n'a plus d'empreinte `sha256`, tout nouveau JS va dans un fichier (`tests/csp.test.js` échoue sinon) et le fichier est ajouté au cache de `sw.js`. Garde = `github.io` **ou** `echo.aulit42369.fr` (05/11) ; ne jamais la retirer : compter dans une appli Android obligerait à déclarer des analytics sur le Play Store. Garder `count.v4.js` + `integrity` (pas `count.js`), comme le Site.
 
 ## Identités d'appli (manifest `id`) — NE JAMAIS CHANGER (29/10)
 Chrome identifie une PWA installée par son `id` ; en changer = une autre appli, l'ancienne reste orpheline. Valeurs en ligne des 5 apps :
