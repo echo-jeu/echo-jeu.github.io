@@ -11,7 +11,7 @@ const cellOf = (m, x, y) => m.idx(clamp(Math.floor(x), 0, m.cols - 1), clamp(Mat
 
 function newHunter(type, x, y, atCell) {
   return { type, x, y, atCell, path: [], prevCell: -1, hunting: false, lit: -100, lastPulse: -1, active: type !== REFLET,
-    route: null, routeIdx: 0, routeDir: 1, senseTimer: 0, lx: x, ly: y, stepAcc: 0, growth: 0 };
+    route: null, routeIdx: 0, routeDir: 1, senseTimer: 0, alertT: -100, lx: x, ly: y, stepAcc: 0, growth: 0 };
 }
 const radiusOf = h => h.type === MERE ? min(0.75, 0.3 + 0.035 * h.growth) : 0.36;
 

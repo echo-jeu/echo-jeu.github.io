@@ -34,7 +34,7 @@ let pulses = [], decoys = [], particles = [], scheduled = [];
 let pulseSeq = 0, px = 0.5, py = 0.5, vx = 0, vy = 0, facing = 0, camX = 0.5, camY = 0.5;
 let energy = C.MAX_ENERGY, decoysLeft = 0, decoysMax = 0, beaconsLeft = 0, beaconsMax = 0, echoesUsed = 0, par3 = 3, par2 = 6, stars = 0;
 let dailyTime = 0, dailyScore = 0, newRecord = false;
-let answerAt = -1, hintT = -100, floorBannerT = -100;
+let answerAt = -1, hintT = -100, floorBannerT = -100, emptyT = -100;
 let beatTimer = 0, beatFlash = 0, shake = 0, levelStartT = 0, shardsTaken = 0, shardsTotal = 0, shakeX = 0, shakeY = 0;
 let stairsArmed = true, pushX = 0, pushY = 0, bumpCd = 0, scanTimer = 0, goalTimer = 0, shardTimer = 0;
 const trailX = new Float32Array(C.TRAIL_N), trailY = new Float32Array(C.TRAIL_N), trailF = new Uint8Array(C.TRAIL_N);

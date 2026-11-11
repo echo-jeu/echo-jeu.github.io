@@ -54,11 +54,12 @@ function render() {
   ctx.lineCap = 'round'; ctx.lineJoin = 'round';
   if (state === TITLE) { renderTitle(); return; }
   if (state === OPTIONS) { renderOptions(); return; }
-  shakeX = shake > 0 ? (Math.random() - 0.5) * shake * 24 : 0;
-  shakeY = shake > 0 ? (Math.random() - 0.5) * shake * 24 : 0;
+  const secoue = shake > 0 && !mouvementReduit();
+  shakeX = secoue ? (Math.random() - 0.5) * shake * 24 : 0;
+  shakeY = secoue ? (Math.random() - 0.5) * shake * 24 : 0;
   if (audioMode) renderAudioWorld(); else renderWorld();
   renderHud();
-  if (state === DEAD) renderOverlay(L('deadTitle'), COL.RED, null, [L('retry')]);
+  if (state === DEAD) { deathFx(); renderOverlay(L('deadTitle'), COL.RED, null, [L('retry')]); }
   else if (state === CLEAR) {
     if (dailyMode) { const r = avantProchain(); renderOverlay(L('dailyWin'), COL.GOLD, null, [
       L('dailyLine', formatTime(dailyTime), echoesUsed, shardsTaken, shardsTotal),
@@ -68,6 +69,15 @@ function render() {
     else renderOverlay(L('clearTitle'), COL.GOLD, stars, [L('clearLine', level, echoesUsed, par3), '', L('deeper')]);
   }
   ctx.globalAlpha = 1;
+}
+
+// Mort : flash blanc ~3 images puis couleurs désaturées (un seul aplat plein écran, pas de filtre)
+function deathFx() {
+  const d = t - stateT;
+  if (d < 0.05) { ctx.globalAlpha = 0.5; ctx.fillStyle = COL.WHITE; ctx.fillRect(0, 0, vw, vh); }
+  if (audioMode) return;
+  ctx.globalCompositeOperation = 'saturation'; ctx.globalAlpha = min(0.85, d * 1.7); ctx.fillStyle = COL.GRAY;
+  ctx.fillRect(0, 0, vw, vh); ctx.globalCompositeOperation = 'source-over';
 }
 
 function renderAudioWorld() {
@@ -174,7 +184,7 @@ function renderWorld() {
     const d = hypot(h.x - px, h.y - py), rad = radiusOf(h);
     let a = dead ? 1 : max(fade(h.lit, 1.2), d < 1.2 + rad ? (1.2 + rad - d) / 1.2 * 0.7 : 0);
     a = max(a, beaconLight(h.x, h.y) * 1.5);
-    if (a > 0.01) drawHunter(h, sx(h.x), sy(h.y), min(1, a));
+    if (a > 0.01) { drawHunter(h, sx(h.x), sy(h.y), min(1, a)); if (t - h.alertT < 0.6) drawAlert(h, sx(h.x), sy(h.y)); }
   }
 
   for (const p of particles) fillCircle(sx(p.x), sy(p.y), p.size, p.color, p.life / p.maxLife);

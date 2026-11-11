@@ -31,11 +31,13 @@ function update(dt) {
     sound.setLoop(0.1, 1.1);
     if (tap && t - stateT > 0.8) { if (dailyMode) goTitle(); else { level++; startLevel(); } }
   }
-  const drag = 1 - dt * 2.2;
+  // Mort : temps ×0,25 pendant 0,5 s (éclats seulement), sauf « réduire les animations »
+  const pdt = state === DEAD && t - stateT < 0.5 && !mouvementReduit() ? dt * 0.25 : dt;
+  const drag = 1 - pdt * 2.2;
   for (let i = particles.length - 1; i >= 0; i--) {
-    const p = particles[i]; p.life -= dt;
+    const p = particles[i]; p.life -= pdt;
     if (p.life <= 0) { particles[i] = particles[particles.length - 1]; particles.pop(); continue; }
-    p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= drag; p.vy *= drag;
+    p.x += p.vx * pdt; p.y += p.vy * pdt; p.vx *= drag; p.vy *= drag;
   }
   shake = max(0, shake - dt * 2.5);
   beatFlash = max(0, beatFlash - dt * 1.8);
@@ -259,6 +261,7 @@ function clearLevel() {
     if (stars > store.get('stars_' + level, 0)) store.set('stars_' + level, stars);
     if (level > best) { best = level; store.set('best', best); }
     totalStars = sumStars();
+    for (let k = 0; k < stars; k++) setTimeout(() => haptics.tick(15), 300 + k * 250);
     say(stars > 1 ? L('sClearMany', stars) : L('sClearOne'));
   }
 }

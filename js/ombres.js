@@ -9,6 +9,7 @@ function alert(f, h, target) {
   if (!h.hunting && f === cur && h.type !== MERE) {
     const d = hypot(h.x - px, h.y - py);
     playAt('growl', h.x, h.y, 0.25 + 0.6 * max(0, 1 - d / C.HEAR_R));
+    h.alertT = t; if (d < 3) haptics.tick(12);
   }
   h.hunting = true;
 }
@@ -131,6 +132,7 @@ function playAt(name, x, y, vol, rate = 1) {
 }
 
 function burst(x, y, count, speed, color, life, size) {
+  if (mouvementReduit()) count = Math.ceil(count / 3);
   for (let i = 0; i < count && particles.length < 600; i++) {
     const a = Math.random() * TAU, s = speed * (0.3 + Math.random() * 0.7), l = life * (0.5 + Math.random() * 0.5);
     particles.push({ x, y, vx: cos(a) * s, vy: sin(a) * s, life: l, maxLife: l, color, size });

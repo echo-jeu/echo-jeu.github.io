@@ -13,6 +13,9 @@ const haptics = {
   success() { this.vib([30, 70, 30, 70, 60]); },
 };
 
+// « Réduire les animations » du système : lu à chaque appel, la préférence peut changer en cours de partie
+const mouvementReduit = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 // =====================================================================
 // Voix (mode audio)
 // =====================================================================

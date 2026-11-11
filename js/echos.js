@@ -70,7 +70,7 @@ function makePulse(kind, ox, oy, dir) {
 }
 
 function firePulse(kind, dir) {
-  if (energy < 1) { sound.play('empty', 0.6); return; }
+  if (energy < 1) { sound.play('empty', 0.6); emptyT = t; return; }
   energy -= 1; echoesUsed++;
   pulses.push(makePulse(kind, px, py, dir));
   if (kind === CONE) sound.play('cone', 0.7); else sound.play('ping', 0.9);

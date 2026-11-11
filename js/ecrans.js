@@ -41,6 +41,14 @@ function drawHunter(h, hx, hy, a) {
   }
 }
 
+// Une Ombre vient de te repérer : « ! » en ressort + anneau rouge, 0,6 s (seulement si elle est déjà visible)
+function drawAlert(h, hx, hy) {
+  const k = (t - h.alertT) / 0.6, calme = mouvementReduit();
+  const pop = calme || k > 0.33 ? 1 : 1 + 0.35 * sin(k / 0.33 * Math.PI);
+  if (!calme) strokeCircle(hx, hy, cell * (0.2 + 0.5 * k), COL.RED, (1 - k) * 0.8, 2);
+  text('!', hx, hy - cell * 0.5, 32 * pop, COL.RED, k < 0.7 ? 1 : (1 - k) / 0.3, 'center');
+}
+
 function toolButton(bx, col, left, label, isDiamond) { // label déjà traduit, compteur inclus
   const by = buttonY(), av = left > 0 ? 1 : 0.3;
   fillCircle(bx, by, 32, col, 0.07 * av);
@@ -63,12 +71,16 @@ function renderHud() {
   const mother = hunters.find(h => h.type === MERE);
   if (mother) text(L('mother', mother.growth), m, top + 38, 11, COL.RED, 0.78, 'left', 0.25);
 
+  // Écho refusé (plus d'énergie) : pastilles secouées ±4 px 0,35 s (sauf « réduire les animations »), vides en rouge clignotant 3 Hz 1,5 s
+  const refus = t - emptyT, calme = mouvementReduit();
+  const trem = refus < 0.35 && !calme ? sin(refus * 60) * 4 * (1 - refus / 0.35) : 0;
+  const rouge = refus < 1.5 && energy < 1 && (calme || Math.floor(t * 6) % 2 === 0);
   const r = 5, gap = 18;
   for (let i = 0; i < C.MAX_ENERGY; i++) {
-    const x = vw - m - (C.MAX_ENERGY - 1 - i) * gap, y = top - 4;
+    const x = vw - m - (C.MAX_ENERGY - 1 - i) * gap + trem, y = top - 4;
     if (energy >= i + 1) fillCircle(x, y, r, COL.CYAN, 1);
     else {
-      strokeCircle(x, y, r, COL.CYAN, 0.25, 1.5);
+      strokeCircle(x, y, r, rouge ? COL.RED : COL.CYAN, rouge ? 0.9 : 0.25, 1.5);
       if (i === Math.floor(energy)) {
         ctx.globalAlpha = 0.9; ctx.strokeStyle = COL.CYAN; ctx.lineWidth = 1.5;
         ctx.beginPath(); ctx.arc(x, y, r, -Math.PI / 2, -Math.PI / 2 + TAU * (energy - i)); ctx.stroke();
@@ -105,8 +117,17 @@ function renderOverlay(title, col, starCount, lines, top = 0.42) {
   let y = vh * top + 34;
   if (starCount !== null) {
     for (let k = 0; k < 3; k++) {
-      const sa = clamp((t - stateT - 0.3 - k * 0.25) / 0.2, 0, 1);
-      text(k < starCount ? '★' : '☆', vw / 2 + (k - 1) * 40, y + 8, 30, k < starCount ? COL.GOLD : COL.WHITE, sa * a * (k < starCount ? 1 : 0.2));
+      const sa = clamp((t - stateT - 0.3 - k * 0.25) / 0.2, 0, 1), sxk = vw / 2 + (k - 1) * 40;
+      if (k >= starCount || mouvementReduit()) { text(k < starCount ? '★' : '☆', sxk, y + 8, 30, k < starCount ? COL.GOLD : COL.WHITE, sa * a * (k < starCount ? 1 : 0.2)); continue; }
+      // Étoile gagnée en ressort : échelle 0 → 1,25 → 1, rotation −40° → 0, 6 étincelles
+      const u = clamp((t - stateT - 0.3 - k * 0.25) / 0.35, 0, 1), sc = u < 0.6 ? 1.25 * u / 0.6 : 1.25 - 0.25 * (u - 0.6) / 0.4;
+      ctx.save(); ctx.translate(sxk, y + 8 - 10); ctx.rotate(-0.7 * (1 - u));
+      text('★', 0, 10, 30 * max(0.01, sc), COL.GOLD, sa * a);
+      ctx.restore();
+      if (u > 0 && u < 1) for (let s = 0; s < 6; s++) {
+        const ang = s * TAU / 6 + 0.5, d = 14 + 22 * u;
+        fillCircle(sxk + cos(ang) * d, y - 2 + sin(ang) * d, 2 * (1 - u), COL.GOLD, 1 - u);
+      }
     }
     y += 44;
   }
