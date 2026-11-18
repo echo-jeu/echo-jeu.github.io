@@ -13,14 +13,15 @@ function fillCircle(x, y, r, color, a) { ctx.globalAlpha = clamp(a, 0, 1); ctx.f
 function strokeCircle(x, y, r, color, a, w) { ctx.globalAlpha = clamp(a, 0, 1); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.beginPath(); ctx.arc(x, y, max(0, r), 0, TAU); ctx.stroke(); }
 function line(x1, y1, x2, y2) { ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); }
 function text(s, x, y, size, color, a, align = 'center', ls = 0) {
-  ctx.font = `300 ${size}px ${FONT}`; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
+  const fw = size <= 15 ? 400 : 300; // petits textes d'information en graisse normale (lisibilité), titres fins
+  ctx.font = `${fw} ${size}px ${FONT}`; ctx.textAlign = align; ctx.textBaseline = 'alphabetic';
   if ('letterSpacing' in ctx) ctx.letterSpacing = (ls * size).toFixed(1) + 'px';
   // Réduit la taille si le texte dépasse la place disponible (langues longues, petits écrans)
   const avail = align === 'center' ? 2 * min(x, vw - x) - 24 : align === 'left' ? vw - x - 12 : x - 12;
   const w = ctx.measureText(s).width;
   if (w > avail && avail > 0) {
     const k = avail / w;
-    ctx.font = `300 ${size * k}px ${FONT}`;
+    ctx.font = `${fw} ${size * k}px ${FONT}`;
     if ('letterSpacing' in ctx) ctx.letterSpacing = (ls * size * k).toFixed(1) + 'px';
   }
   ctx.globalAlpha = clamp(a, 0, 1); ctx.fillStyle = color; ctx.fillText(s, x, y);
@@ -47,7 +48,7 @@ function beaconLight(x, y) {
 }
 
 function render() {
-  majLienLegal();
+  majLienLegal(); majPause(); majMenuA11y();
   autres.maj(state === TITLE, lang);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.globalAlpha = 1; ctx.fillStyle = COL.BG; ctx.fillRect(0, 0, vw, vh);
@@ -88,7 +89,7 @@ function renderAudioWorld() {
   }
   fillCircle(pxs, pys, cell * 0.4, COL.WHITE, 0.08);
   fillCircle(pxs, pys, cell * 0.09, COL.WHITE, 0.8);
-  text(L('audioLabel'), vw / 2, vh * 0.78, 11, COL.WHITE, 0.5, 'center', 0.4);
+  text(L('audioLabel'), vw / 2, vh * 0.78, 13, COL.WHITE, 0.62, 'center', 0.4);
   const va = state === DEAD ? min(0.55, (t - stateT) * 2) : beatFlash * 0.55;
   if (va > 0.01) { ctx.globalAlpha = va; ctx.fillStyle = vignette; ctx.fillRect(0, 0, vw, vh); }
   ctx.globalAlpha = 1;
@@ -204,7 +205,7 @@ function renderWorld() {
       ctx.lineTo(pxs + cos(ang + C.CONE_HALF) * len, pys + sin(ang + C.CONE_HALF) * len); ctx.stroke();
       ctx.beginPath(); ctx.arc(pxs, pys, len, ang - C.CONE_HALF, ang + C.CONE_HALF); ctx.stroke();
     } else strokeCircle(pxs, pys, cell * 0.45, COL.CYAN, 0.25 + 0.15 * sin(t * 10), 1.5);
-    text(L('aim'), vw / 2, vh * 0.74, 11, COL.CYAN, 0.8, 'center', 0.3);
+    text(L('aim'), vw / 2, vh * 0.74, 13, COL.CYAN, 0.8, 'center', 0.3);
   }
 
   const ha = fade(hintT, 1.3);

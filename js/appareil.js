@@ -6,15 +6,15 @@
 // Vibrations (Android : Chrome / PWA ; absent sur iPhone)
 // =====================================================================
 const haptics = {
-  vib(p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (e) {} },
+  vib(p) { try { if (vibOn && navigator.vibrate) navigator.vibrate(p); } catch (e) {} },
   heartbeat(i) { this.vib([Math.round(30 + 30 * i), 110, Math.round(18 + 25 * i)]); },
   tick(ms = 14) { this.vib(ms); },
   boom() { this.vib([80, 60, 300]); },
   success() { this.vib([30, 70, 30, 70, 60]); },
 };
 
-// « Réduire les animations » du système : lu à chaque appel, la préférence peut changer en cours de partie
-const mouvementReduit = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+// « Réduire les animations » du système OU réglage « Mouvement réduit » du jeu : lu à chaque appel
+const mouvementReduit = () => mouvOn || matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // =====================================================================
 // Voix (mode audio)
@@ -77,6 +77,8 @@ function detectLang() {
   for (const p of prefs) { const i = I18N.langs.findIndex(l => l.code === String(p).slice(0, 2).toLowerCase()); if (i >= 0) return i; }
   return 1;
 }
+// Réglages communs aux 4 jeux (Options) : son, vibrations, mouvement réduit
+let sonOn = store.get('son', true), vibOn = store.get('vib', true), mouvOn = store.get('mouvement', false);
 lang = store.get('lang', -1);
 if (lang < 0 || lang >= I18N.langs.length) lang = detectLang();
 document.documentElement.lang = I18N.langs[lang].code;

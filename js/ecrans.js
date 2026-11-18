@@ -55,21 +55,21 @@ function toolButton(bx, col, left, label, isDiamond) { // label déjà traduit, 
   strokeCircle(bx, by, 32, col, 0.7 * av, 1.5);
   strokeCircle(bx, by, 16, col, 0.45 * av, 1.5);
   if (isDiamond) diamond(bx, by, 6, Math.PI / 4, col, av); else fillCircle(bx, by, 5, col, av);
-  text(label, bx, by + 48, 10, col, av * 0.8, 'center', 0.2);
+  text(label, bx, by + 48, 13, col, av * 0.8, 'center', 0.2);
 }
 
 function renderHud() {
-  const top = 44, m = 22;
+  const top = 44, m = 22, mg = 74; // à gauche : place du bouton pause (44 px, js/pause.js)
   if (dailyMode) {
-    text(L('daily'), m, top, 13, COL.WHITE, 0.82, 'left', 0.25);
-    text(`⏱ ${formatTime(state === CLEAR ? dailyTime : t - levelStartT)}   ◆ ${shardsTaken}/${shardsTotal}`, m, top + 20, 11, COL.GOLD, 0.78, 'left', 0.25);
+    text(L('daily'), mg, top, 13, COL.WHITE, 0.82, 'left', 0.25);
+    text(`⏱ ${formatTime(state === CLEAR ? dailyTime : t - levelStartT)}   ◆ ${shardsTaken}/${shardsTotal}`, mg, top + 20, 13, COL.GOLD, 0.78, 'left', 0.25);
   } else {
     const floorTxt = floors.length > 1 ? ' · ' + L('floor', floorIdx + 1, floors.length) : '';
-    text(L('level', level) + floorTxt + (easyOn() ? ' · ' + L('easyTag') : ''), m, top, 13, COL.WHITE, 0.82, 'left', 0.25);
-    text('◆ ' + L('shards', shardsTaken, shardsTotal), m, top + 20, 11, COL.VIOLET, 0.75, 'left', 0.25);
+    text(L('level', level) + floorTxt + (easyOn() ? ' · ' + L('easyTag') : ''), mg, top, 13, COL.WHITE, 0.82, 'left', 0.25);
+    text('◆ ' + L('shards', shardsTaken, shardsTotal), mg, top + 20, 13, COL.VIOLET, 0.75, 'left', 0.25);
   }
   const mother = hunters.find(h => h.type === MERE);
-  if (mother) text(L('mother', mother.growth), m, top + 38, 11, COL.RED, 0.78, 'left', 0.25);
+  if (mother) text(L('mother', mother.growth), mg, top + 40, 13, COL.RED, 0.78, 'left', 0.25);
 
   // Écho refusé (plus d'énergie) : pastilles secouées ±4 px 0,35 s (sauf « réduire les animations »), vides en rouge clignotant 3 Hz 1,5 s
   const refus = t - emptyT, calme = mouvementReduit();
@@ -87,7 +87,7 @@ function renderHud() {
       }
     }
   }
-  text(L('echoes', echoesUsed), vw - m + r, top + 20, 11, COL.CYAN, 0.6, 'right', 0.25);
+  text(L('echoes', echoesUsed), vw - m + r, top + 20, 13, COL.CYAN, 0.7, 'right', 0.25);
 
   if (state === PLAY) {
     if (decoysMax > 0) toolButton(decoyX(), COL.GOLD, decoysLeft, L('decoy', decoysLeft), true);
@@ -159,11 +159,12 @@ function renderTitle() {
   if (best > 0) info.push([L('record', best, totalStars), COL.WHITE, 0.5]);
   if (!accueil || Defi.parisDate().num !== accueil.j.num) majAccueil(); // minuit de Paris passé pendant l'accueil
   info.push([accueil.fait ? L('defiFait', accueil.j.n, nombre(accueil.score)) : L('defiAFaire', accueil.j.n), COL.GOLD, 0.85, accueil.serie]);
-  info.push([audioMode ? L('audioMenuHint') : L('headphones'), COL.GOLD, 0.67]);
-  if (!matchMedia('(pointer: coarse)').matches) info.push([L('keyboard'), COL.CYAN, 0.55]);
+  // « vibrations activées » seulement si elles le sont (réglage Vibrations des Options)
+  info.push([audioMode ? L('audioMenuHint') : vibOn ? L('headphones') : L('headphones').split(' · ')[0], COL.GOLD, 0.7]);
+  if (!matchMedia('(pointer: coarse)').matches) info.push([L('keyboard'), COL.CYAN, 0.62]);
   info.forEach((l, k) => {
-    const y = vh * 0.88 + k * 18, suite = l[3] > 0 ? '      ' + l[3] : '';
-    text(l[0] + suite, cx, y, 11, l[1], l[2], 'center', 0.1);
+    const y = vh * 0.87 + k * 20, suite = l[3] > 0 ? '      ' + l[3] : '';
+    text(l[0] + suite, cx, y, 13, l[1], l[2], 'center', 0.1);
     if (suite) { const w = ctx.measureText(l[0] + suite).width; flamme(cx - w / 2 + ctx.measureText(l[0] + '   ').width, y - 4, 5.5, l[2]); }
   });
   ctx.globalAlpha = 1;
@@ -176,28 +177,38 @@ function majLienLegal() {
   if (lienLegal.hidden === voir) lienLegal.hidden = !voir;
 }
 
+// Libellés, descriptions et valeurs des 8 réglages (aussi lus par les boutons HTML accessibles de js/pause.js)
+function optionTextes() {
+  return {
+    names: [L('optEasy'), L('optReal'), L('optAudio'), L('optGyro'), L('optLang'), LW('optSon'), LW('optVib'), LW('optMouv')],
+    desc: [L('descEasy'), L('descReal'), L('descAudio'), tilt.available ? L('descGyro') : L('descGyroNA'), L('descLang'), LW('descSon'), LW('descVib'), LW('descMouv')],
+    on: [easy, realistic, audioMode, gyro, true, sonOn, vibOn, mouvOn],
+    values: [easy, realistic, audioMode, gyro].map(v => L(v ? 'yes' : 'no')).concat([I18N.langs[lang].name], [sonOn, vibOn, mouvOn].map(v => L(v ? 'yes' : 'no'))),
+  };
+}
+
 function renderOptions() {
-  text(L('options'), vw / 2, vh * 0.11, 26, COL.WHITE, 0.9, 'center', 0.5);
-  const names = [L('optEasy'), L('optReal'), L('optAudio'), L('optGyro'), L('optLang')];
-  const desc = [L('descEasy'), L('descReal'), L('descAudio'), tilt.available ? L('descGyro') : L('descGyroNA'), L('descLang')];
-  const on = [easy, realistic, audioMode, gyro, true];
-  const values = [easy, realistic, audioMode, gyro].map(v => L(v ? 'yes' : 'no')).concat([I18N.langs[lang].name]);
-  const cols = [COL.VIOLET, COL.CYAN, COL.GOLD, COL.ICE, COL.WHITE];
-  for (const b of optionButtons()) {
-    if (b.k === 5) {
-      roundRect(b.x, b.y, b.w, b.h, 26); ctx.globalAlpha = 0.35; ctx.strokeStyle = COL.WHITE; ctx.lineWidth = 1.5; ctx.stroke();
-      text(L('back'), b.x + b.w / 2, b.y + b.h / 2 + 5, 13, COL.WHITE, 0.8, 'center', 0.3);
+  text(L('options'), vw / 2, vh * 0.09, 26, COL.WHITE, 0.9, 'center', 0.5);
+  const { names, desc, on, values } = optionTextes();
+  const cols = [COL.VIOLET, COL.CYAN, COL.GOLD, COL.ICE, COL.WHITE, COL.ORANGE, COL.PINK, COL.STAIRS];
+  const boutons = optionButtons();
+  for (const b of boutons) {
+    if (b.k === OPT_RETOUR) {
+      roundRect(b.x, b.y, b.w, b.h, 22); ctx.globalAlpha = 0.35; ctx.strokeStyle = COL.WHITE; ctx.lineWidth = 1.5; ctx.stroke();
+      text(L('back'), b.x + b.w / 2, b.y + b.h / 2 + 5, 13, COL.WHITE, 0.85, 'center', 0.3);
       continue;
     }
     const col = b.k === 3 && !tilt.available ? COL.GRAY : cols[b.k];
     const lit = on[b.k] && b.k !== 4;
-    roundRect(b.x, b.y, b.w, b.h, 26);
+    roundRect(b.x, b.y, b.w, b.h, 22);
     ctx.globalAlpha = lit ? 0.12 : 0.03; ctx.fillStyle = col; ctx.fill();
     ctx.globalAlpha = lit || b.k === 4 ? 0.8 : 0.3; ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke();
-    text(names[b.k], b.x + 22, b.y + b.h / 2 + 5, 13, col, lit || b.k === 4 ? 0.95 : 0.75, 'left', 0.2);
-    text(values[b.k], b.x + b.w - 22, b.y + b.h / 2 + 5, 13, col, lit || b.k === 4 ? 0.95 : 0.75, 'right', 0.1);
-    text(desc[b.k], vw / 2, b.y + b.h + 17, 11, COL.WHITE, 0.47, 'center', 0.03);
+    text(names[b.k], b.x + 22, b.y + b.h / 2 + 5, 13, col, lit || b.k === 4 ? 0.95 : 0.8, 'left', 0.2);
+    text(values[b.k], b.x + b.w - 22, b.y + b.h / 2 + 5, 13, col, lit || b.k === 4 ? 0.95 : 0.8, 'right', 0.1);
+    if (b.desc) text(desc[b.k], vw / 2, b.y + b.h + 17, 13, COL.WHITE, 0.62, 'center', 0.03);
   }
-  text(L('dailyNote'), vw / 2, vh * 0.96, 11, COL.WHITE, 0.5, 'center', 0.03);
+  // Petit écran : pas de place sous chaque ligne → description du dernier réglage touché (4 s), sinon la note du défi
+  const montrer = !boutons[0].desc && optDerniere >= 0 && optDerniere < OPT_RETOUR && t - optDerniereT < 4;
+  text(montrer ? desc[optDerniere] : L('dailyNote'), vw / 2, vh - 70, 13, COL.WHITE, montrer ? 0.75 : 0.62, 'center', 0.03);
   ctx.globalAlpha = 1;
 }

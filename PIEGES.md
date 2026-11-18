@@ -45,3 +45,9 @@ Chrome identifie une PWA installée par son `id` ; en changer = une autre appli,
 - La CSP est en `<meta>` : Chrome ne repère alors plus les `<script src>` à l'avance et les charge **un par un**. D'où le bloc
   `<link rel="preload" … as="script">` avant `</head>` : **ajouter / renommer un script = mettre aussi à jour sa ligne de préchargement**
   (même adresse exacte, `?v=` compris). Un oubli ne casse rien, il ralentit seulement.
+
+## Audit du 18/11/2026
+- **Textes web hors du bloc généré** : `js/textes-web.js` (`LW`) n'est **pas** lu par `gen_i18n.py`. Ne pas y mettre un texte qui existe côté Android ; le jour où l'appli reçoit la pause et les nouveaux réglages, déplacer ces clés dans `i18n/strings.json` et remplacer `LW` par `L`.
+- **Boutons HTML posés sur le canvas** (`#menuA11y`) : ils interceptent le doigt sur l'accueil et les Options. Un nouveau bouton dessiné = l'ajouter à `titleButtons()` / `optionButtons()` (sinon il ne sera ni lisible ni touchable). Le clavier global ignore leurs touches (sinon Entrée agirait deux fois).
+- **CSP sans `'unsafe-inline'`** : plus de `<style>` injecté ni d'attribut `style="…"` ; `el.style.x = …` (CSSOM) reste permis.
+- **Échap / Retour en partie = pause** (plus retour direct au menu) ; le menu passe par le bouton « Menu » de la pause (`ECHO.menu()` dans les tests).

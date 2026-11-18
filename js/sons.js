@@ -13,13 +13,14 @@ class Sound {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     try { this.ctx = new AC(); } catch (e) { return; }
-    this.master = this.ctx.createGain(); this.master.gain.value = 0.9; this.master.connect(this.ctx.destination);
+    this.master = this.ctx.createGain(); this.master.gain.value = sonOn ? 0.9 : 0; this.master.connect(this.ctx.destination);
     this.build();
     const s = this.ctx.createBufferSource(); s.buffer = this.buf.drone; s.loop = true;
     const g = this.ctx.createGain(); g.gain.value = 0;
     s.connect(g); g.connect(this.master); s.start();
     this.loop = { s, g };
   }
+  volume() { if (this.master) this.master.gain.value = sonOn ? 0.9 : 0; } // réglage « Son » des Options
   suspend() { if (this.ctx && this.ctx.state === 'running') this.ctx.suspend().catch(() => {}); }
   resume() { if (this.ctx && this.ctx.state === 'suspended') this.ctx.resume().catch(() => {}); }
   synth(dur, gen) { const n = Math.floor(dur * RATE), a = new Float32Array(n); for (let i = 0; i < n; i++) a[i] = gen(i / RATE); return a; }

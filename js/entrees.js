@@ -13,8 +13,13 @@ const decoyX = () => vw - 58, beaconX = () => 58;
 function inDecoy(x, y) { return state === PLAY && decoysMax > 0 && hypot(x - decoyX(), y - buttonY()) < 40; }
 function inBeacon(x, y) { return state === PLAY && beaconsMax > 0 && hypot(x - beaconX(), y - buttonY()) < 40; }
 
+// Contour de focus du canvas seulement au clavier (au doigt, il dessinait un liseré cyan autour de l'écran)
+const racineHtml = document.documentElement;
+addEventListener('keydown', () => { if (racineHtml.classList) racineHtml.classList.add('clavier'); }, true);
+addEventListener('pointerdown', () => { if (racineHtml.classList) racineHtml.classList.remove('clavier'); }, true);
+
 cv.addEventListener('pointerdown', e => {
-  e.preventDefault(); sound.init(); cv.focus();
+  e.preventDefault(); sound.init(); cv.focus({ preventScroll: true });
   const x = e.clientX, y = e.clientY;
   if (input.touching && input.joyId !== null) {
     if (inDecoy(x, y)) input.decoy = true; else if (inBeacon(x, y)) input.beacon = true; else input.tap = true;
@@ -51,8 +56,9 @@ cv.addEventListener('pointercancel', e => release(e, true));
 cv.addEventListener('contextmenu', e => e.preventDefault());
 
 addEventListener('keydown', e => {
-  if (e.target && e.target.closest && e.target.closest('#defiFin, #autres, #autresBtn')) return;
+  if (e.target && e.target.closest && e.target.closest('#defiFin, #autres, #autresBtn, #pause, #pauseBtn, #menuA11y')) return;
   const k = e.key.toLowerCase();
+  if (enPause) return; // la feuille de pause gère ses touches (Échap = reprendre)
   if (state === CLEAR && dailyMode && k === 'p') { if (!e.repeat) partager(); return; }
   if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
   sound.init();
@@ -65,26 +71,34 @@ addEventListener('keydown', e => {
     return;
   }
   if (state === OPTIONS) { if (k === 'escape') input.back = true; return; }
+  if (k === 'escape') { ouvrirPause(); return; } // partie, mort ou sortie : Échap ouvre la pause (comme Retour)
   if (k === ' ' || k === 'enter') input.tap = true;
   else if (k === 'f') { input.coneAngle = facing; input.cone = true; }
   else if (k === 'e') input.decoy = true;
   else if (k === 'b') input.beacon = true;
-  else if (k === 'escape') input.back = true;
 });
 addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
 addEventListener('blur', () => keys.clear());
 
-// Bouton retour d'Android : partie / options → menu
-let histPushed = false, ignorePop = false;
-function pushGameHistory() { if (!histPushed) { try { history.pushState({ echo: 1 }, ''); histPushed = true; } catch (e) {} } }
+// Bouton Retour du téléphone (même schéma dans les 4 jeux) : une entrée d'historique hors de l'accueil.
+// Options → accueil ; en partie (ou mort / sortie) → la pause ; dans la pause → reprise. Il ne ferme jamais le jeu en cours.
+let histPushed = false, ignorePop = false, pushApres = false, enPause = false;
+function pushGameHistory() {
+  if (ignorePop) { pushApres = true; return; } // un history.back() est en cours : on repose l'entrée après lui
+  if (!histPushed) { try { history.pushState({ echo: 1 }, ''); histPushed = true; } catch (e) {} }
+}
 addEventListener('popstate', () => {
   histPushed = false;
-  if (ignorePop) { ignorePop = false; return; }
+  if (ignorePop) { ignorePop = false; if (pushApres) { pushApres = false; if (state !== TITLE) pushGameHistory(); } return; }
+  if (enPause) { reprendre(); pushGameHistory(); return; }
+  if (state === PLAY || state === DEAD || state === CLEAR) { ouvrirPause(); pushGameHistory(); return; }
   if (state !== TITLE) input.back = true;
 });
 function goTitle() {
+  if (enPause) fermerPause();
   state = TITLE; stateT = t; defiPanneau(false); majAccueil();
-  if (histPushed) { histPushed = false; ignorePop = true; try { history.back(); } catch (e) {} }
+  pushApres = false;
+  if (histPushed) { histPushed = false; ignorePop = true; try { history.back(); } catch (e) { ignorePop = false; } }
 }
 
 // Écran allumé pendant la partie
@@ -93,8 +107,8 @@ async function keepAwake() {
   try { if ('wakeLock' in navigator && !wakeLock) { wakeLock = await navigator.wakeLock.request('screen'); wakeLock.addEventListener('release', () => { wakeLock = null; }); } } catch (e) {}
 }
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden) { sound.suspend(); try { speechSynthesis.cancel(); } catch (e) {} }
-  else { sound.resume(); if (state !== TITLE) keepAwake(); last = performance.now(); }
+  if (document.hidden) { sound.suspend(); try { speechSynthesis.cancel(); } catch (e) {} if (state === PLAY) ouvrirPause(); }
+  else { if (!enPause) sound.resume(); if (state !== TITLE) keepAwake(); last = performance.now(); }
 });
 
 // Installation (Android / Chrome)

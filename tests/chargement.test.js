@@ -21,10 +21,14 @@ test('parcours complet au clavier : partie, défi, options, niveaux 1 à 12', ()
   p.touche('ArrowRight', 'bas'); p.image(40); p.touche('ArrowRight', 'haut');
   for (const k of [' ', 'f', 'e', 'b']) { p.touche(k); p.image(20); }
   p.touche('Escape'); p.image(5);
-  assert.equal(etat(p).state, 0, 'retour au menu');
+  assert.equal(etat(p).state, 2, 'Échap en partie : la partie reste…');
+  assert.equal(etat(p).pause, true, '… et la pause s\'ouvre');
+  p.fenetre.ECHO.menu(); p.image(5);
+  assert.equal(etat(p).state, 0, 'bouton Menu de la pause : retour au menu');
+  assert.equal(etat(p).pause, false);
   p.touche('j'); p.image(5);
   assert.equal(etat(p).state, 2, 'défi lancé');
-  p.touche('Escape'); p.image(5);
+  p.fenetre.ECHO.menu(); p.image(5);
   p.touche('o'); p.image(30);
   assert.equal(etat(p).state, 1, 'options');
   p.touche('Escape'); p.image(5);
@@ -46,6 +50,35 @@ test('les 7 langues s\'affichent sans erreur', () => {
     p.touche('o'); p.image(10);
     p.fenetre.ECHO.go(1); p.image(10);
   }
+});
+
+test('textes web (js/textes-web.js, hors bloc généré) : chaque clé LW() existe dans les 7 langues', () => {
+  const code = scripts().map(s => s.code).join('\n');
+  const vm = require('node:vm');
+  const c = { lang: 0 };
+  vm.runInNewContext(require('./page.js').lire('js/textes-web.js').replace(/const (TW|LW) =/g, 'this.$1 ='), c);
+  const cles = new Set([...code.matchAll(/\bLW\('([A-Za-z0-9_]+)'[,)]/g)].map(m => m[1]));
+  assert.ok(cles.size >= 10, 'clés trouvées : ' + cles.size);
+  for (const k of cles) {
+    assert.ok(c.TW[k], 'texte web manquant : ' + k);
+    assert.equal(c.TW[k].length, 7, k);
+    assert.ok(c.TW[k].every(s => typeof s === 'string' && s.length), k);
+  }
+});
+
+test('bouton Retour du téléphone : en partie il ouvre la pause, dans la pause il reprend, jamais il ne quitte', () => {
+  const p = charger();
+  p.image(30);
+  p.touche('Enter'); p.image(5);
+  assert.equal(etat(p).state, 2);
+  const pop = p.ecouteurs['window:popstate'] || [];
+  assert.ok(pop.length, 'écouteur popstate');
+  pop.forEach(f => f({})); p.image(5);
+  assert.equal(etat(p).state, 2, 'toujours en partie');
+  assert.equal(etat(p).pause, true, 'Retour → pause');
+  pop.forEach(f => f({})); p.image(5);
+  assert.equal(etat(p).pause, false, 'Retour dans la pause → reprise');
+  assert.equal(etat(p).state, 2);
 });
 
 test('chaque texte demandé par le code existe dans les 7 langues', () => {

@@ -118,3 +118,9 @@ GoatCounter sans cookie, chemins `/echo/…`, chargé par le script d'une ligne 
 ## Performances (16/11/2026)
 - Scripts préchargés en parallèle (`rel=preload` dans `<head>`, voir PIEGES) ; polices `.woff2` gardées un an par Caddy
   (`serveur-aulit/Caddyfile`, snippet `statique`), le reste 10 min.
+
+## Audit du 18/11/2026 (pause, Retour, réglages, accessibilité)
+- `js/textes-web.js` (après `js/i18n.js`) : objet `TW` + fonction `LW(clé)`, textes **propres au web** dans les 7 langues (pause, Son, Vibrations, Mouvement réduit). Hors du bloc généré `<i18n:auto>` : `gen_i18n.py` ne les connaît pas (le projet Android n'a pas encore ces écrans). Test : chaque `LW('…')` existe dans les 7 langues.
+- `js/pause.js` (après `js/defi-ecran.js`) : bouton `#pauseBtn` (haut gauche, PLAY / DEAD / CLEAR), feuille `#pause` (Reprendre / Recommencer / Menu), `enPause` fige `update()` ; `#menuA11y` : boutons HTML transparents recalculés depuis `titleButtons()` / `optionButtons()` (même rectangle que le dessin), clic = `titleChoix` / `optionAction`.
+- Historique (`js/entrees.js`) : une seule entrée tant qu'on n'est pas à l'accueil ; `popstate` → pause en partie, reprise dans la pause, accueil depuis les Options ; `goTitle()` retire l'entrée (`ignorePop`, `pushApres` si une partie repart avant la fin du `history.back()`).
+- Réglages : `sonOn` (`echo_son`, volume du `master` Web Audio), `vibOn` (`echo_vib`, `haptics.vib`), `mouvOn` (`echo_mouvement`, ajouté à `mouvementReduit()`) dans `js/appareil.js`.

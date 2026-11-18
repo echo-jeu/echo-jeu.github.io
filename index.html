@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://aulit42369.goatcounter.com; media-src 'self'; font-src 'self'; connect-src 'self' https://aulit42369.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self'; img-src 'self' data: https://aulit42369.goatcounter.com; media-src 'self'; font-src 'self'; connect-src 'self' https://aulit42369.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Jeu de labyrinthe dans le noir, guidé par l'écho | ÉCHO</title>
 <meta name="description" content="Tu avances dans un labyrinthe plongé dans le noir. Chaque écho montre les murs un instant, mais il attire aussi les Ombres.">
 <meta name="theme-color" content="#05070a">
@@ -32,6 +32,7 @@
 <link rel="preload" href="share-card.js" as="script">
 <link rel="preload" href="autres-jeux.js" as="script">
 <link rel="preload" href="js/i18n.js" as="script">
+<link rel="preload" href="js/textes-web.js" as="script">
 <link rel="preload" href="js/reglages.js" as="script">
 <link rel="preload" href="js/labyrinthe.js" as="script">
 <link rel="preload" href="js/sons.js" as="script">
@@ -45,15 +46,24 @@
 <link rel="preload" href="js/rendu.js" as="script">
 <link rel="preload" href="js/ecrans.js" as="script">
 <link rel="preload" href="js/defi-ecran.js" as="script">
+<link rel="preload" href="js/pause.js" as="script">
 <link rel="preload" href="js/boucle.js" as="script">
 <link rel="preload" href="js/stats.js" as="script">
 </head>
 <body>
 <main>
 <h1 class="sr">ÉCHO, jeu de labyrinthe dans le noir</h1>
-<noscript><p style="position:relative;z-index:3;max-width:34em;margin:0 auto;padding:24px;font:16px/1.5 system-ui,sans-serif;color:#fff">ÉCHO est un jeu de labyrinthe dans le noir : lance un écho pour révéler les murs, écoute les sons et échappe aux Ombres. Jeu sonore gratuit, jouable hors ligne sur Android et dans le navigateur. Active JavaScript pour jouer.</p></noscript>
+<noscript><p class="noscript">ÉCHO est un jeu de labyrinthe dans le noir : lance un écho pour révéler les murs, écoute les sons et échappe aux Ombres. Jeu sonore gratuit, jouable hors ligne sur Android et dans le navigateur. Active JavaScript pour jouer.</p></noscript>
 <canvas id="echo" tabindex="0" aria-label="ÉCHO, jeu de labyrinthe dans le noir"></canvas>
 <a id="lienLegal" href="privacy.html" hidden></a>
+<div id="menuA11y"></div>
+<button id="pauseBtn" type="button" aria-label="Pause" hidden></button>
+<div id="pause" role="dialog" aria-modal="true" aria-labelledby="pauseTitre" hidden>
+  <h2 id="pauseTitre">PAUSE</h2>
+  <button id="pauseReprendre" type="button">REPRENDRE</button>
+  <button id="pauseRecommencer" type="button">RECOMMENCER</button>
+  <button id="pauseMenu" type="button">MENU</button>
+</div>
 <div id="defiFin" hidden>
   <pre id="defiApercu" role="img"></pre>
   <button id="defiPartager" type="button"></button>
@@ -66,6 +76,7 @@
 <script src="share-card.js"></script>
 <script src="autres-jeux.js"></script>
 <script src="js/i18n.js"></script>
+<script src="js/textes-web.js"></script>
 <script src="js/reglages.js"></script>
 <script src="js/labyrinthe.js"></script>
 <script src="js/sons.js"></script>
@@ -79,6 +90,7 @@
 <script src="js/rendu.js"></script>
 <script src="js/ecrans.js"></script>
 <script src="js/defi-ecran.js"></script>
+<script src="js/pause.js"></script>
 <script src="js/boucle.js"></script>
 <script type="application/ld+json">
 {

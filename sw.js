@@ -1,9 +1,9 @@
 // ÉCHO — service worker : le jeu fonctionne hors ligne après la première visite.
 // Change VERSION à chaque mise à jour pour forcer le rafraîchissement du cache.
-const VERSION = 'echo-v2.10';
+const VERSION = 'echo-v2.11';
 // Mêmes fichiers, même ordre que les balises de index.html (contrôlé par tests/chargement.test.js).
-const JEU = ['i18n', 'reglages', 'labyrinthe', 'sons', 'appareil', 'etat', 'entrees', 'niveau', 'logique', 'echos', 'ombres',
-  'rendu', 'ecrans', 'defi-ecran', 'boucle'].map(n => './js/' + n + '.js');
+const JEU = ['i18n', 'textes-web', 'reglages', 'labyrinthe', 'sons', 'appareil', 'etat', 'entrees', 'niveau', 'logique', 'echos', 'ombres',
+  'rendu', 'ecrans', 'defi-ecran', 'pause', 'boucle'].map(n => './js/' + n + '.js');
 const FILES = ['./', './index.html', './css/echo.css', './defi.js', './share-card.js', './autres-jeux.js', ...JEU, './js/stats.js', './js/privacy.js',
   './privacy.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-512.png'];
 

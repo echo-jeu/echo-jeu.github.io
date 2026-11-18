@@ -106,6 +106,6 @@ test('autres jeux : les 3 autres jeux, liens web exacts, ÉCHO absent', () => {
 
 test('autres jeux : visible seulement à l\'accueil, clavier du jeu ignoré dans le panneau', () => {
   assert.ok(html.includes('autres.maj(state === TITLE, lang);'));
-  assert.ok(html.includes("e.target.closest('#defiFin, #autres, #autresBtn')"));
+  assert.ok(html.includes("e.target.closest('#defiFin, #autres, #autresBtn, #pause, #pauseBtn, #menuA11y')"));
   assert.ok(html.includes('const autres = AutresJeux.init(document, window, L);'));
 });

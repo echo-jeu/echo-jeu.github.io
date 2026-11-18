@@ -6,6 +6,7 @@
 // Logique
 // =====================================================================
 function update(dt) {
+  if (enPause) { input.tap = input.cone = input.decoy = input.beacon = input.back = false; input.titleAction = -1; return; } // tout est figé
   t += dt;
   const tap = input.tap, cone = input.cone, decoy = input.decoy, beacon = input.beacon, back = input.back, ta = input.titleAction;
   input.tap = input.cone = input.decoy = input.beacon = input.back = false; input.titleAction = -1;
@@ -62,41 +63,53 @@ function titleAction(k) {
 function titleTap(x, y) {
   if (audioMode && y < vh * 0.5) { titleAction(0); return; }
   for (const b of titleButtons()) {
-    if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) {
-      if (b.k <= 1 && matchMedia('(pointer: coarse)').matches && !standalone() && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      }
-      titleAction(b.k); return;
-    }
+    if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) { titleChoix(b.k); return; }
   }
 }
+// Bouton de l'accueil touché (canvas ou bouton HTML qui le double, voir js/pause.js) : plein écran au doigt, puis l'action
+function titleChoix(k) {
+  if (k <= 1 && matchMedia('(pointer: coarse)').matches && !standalone() && document.documentElement.requestFullscreen) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
+  titleAction(k);
+}
+// Options : 8 réglages + RETOUR (k = 8). Hauteur ≥ 44 px ; les descriptions ne s'affichent sous chaque ligne
+// que s'il reste la place (sinon celle du dernier réglage touché s'affiche en bas, voir renderOptions).
+const OPT_N = 9, OPT_RETOUR = 8;
 function optionButtons() {
-  const top = vh * 0.2, gap = min(84, (vh * 0.93 - 50 - top) / 5), w = min(vw * 0.8, 380), h = min(52, gap - 26);
+  const top = vh * 0.15, bas = vh - 110; // en bas : note du défi + lien légal (44 px)
+  const gap = min(84, (bas - top) / (OPT_N - 0.5)), w = min(vw * 0.8, 380), h = min(52, max(44, gap - 26));
   const out = [];
-  for (let k = 0; k < 6; k++) {
-    const cy = k < 5 ? top + k * gap : top + 5 * gap + 10;
-    out.push({ k, x: vw / 2 - w / 2, y: cy - h / 2, w, h });
+  for (let k = 0; k < OPT_N; k++) {
+    const cy = k < OPT_RETOUR ? top + k * gap : top + OPT_RETOUR * gap + 6;
+    out.push({ k, x: vw / 2 - w / 2, y: cy - h / 2, w, h, desc: gap - h >= 22 });
   }
   return out;
 }
 function optionsTap(x, y) {
   for (const b of optionButtons()) {
-    if (!(x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h)) continue;
-    if (b.k === 0) { easy = !easy; store.set('easy', easy); say(L(easy ? 'sEasyOn' : 'sEasyOff')); }
-    else if (b.k === 1) { realistic = !realistic; store.set('realistic', realistic); say(L(realistic ? 'sRealOn' : 'sRealOff')); }
-    else if (b.k === 2) { audioMode = !audioMode; store.set('audio', audioMode); speech.say(L(audioMode ? 'sAudioOn' : 'sAudioOff')); }
-    else if (b.k === 3 && tilt.available) {
-      gyro = !gyro; store.set('gyro', gyro);
-      if (gyro) tilt.start(); else tilt.stop();
-      say(L(gyro ? 'sGyroOn' : 'sGyroOff'));
-    } else if (b.k === 4) {
-      lang = (lang + 1) % I18N.langs.length; store.set('lang', lang);
-      document.documentElement.lang = I18N.langs[lang].code;
-      say(I18N.langs[lang].name);
-    } else if (b.k === 5) { goTitle(); say(L('sMenu')); }
-    haptics.tick();
-    return;
+    if (x >= b.x && x <= b.x + b.w && y >= b.y && y <= b.y + b.h) { optionAction(b.k); return; }
   }
+}
+let optDerniere = -1, optDerniereT = -100;
+function optionAction(k) {
+  if (k === 0) { easy = !easy; store.set('easy', easy); say(L(easy ? 'sEasyOn' : 'sEasyOff')); }
+  else if (k === 1) { realistic = !realistic; store.set('realistic', realistic); say(L(realistic ? 'sRealOn' : 'sRealOff')); }
+  else if (k === 2) { audioMode = !audioMode; store.set('audio', audioMode); speech.say(L(audioMode ? 'sAudioOn' : 'sAudioOff')); }
+  else if (k === 3 && tilt.available) {
+    gyro = !gyro; store.set('gyro', gyro);
+    if (gyro) tilt.start(); else tilt.stop();
+    say(L(gyro ? 'sGyroOn' : 'sGyroOff'));
+  } else if (k === 4) {
+    lang = (lang + 1) % I18N.langs.length; store.set('lang', lang);
+    document.documentElement.lang = I18N.langs[lang].code;
+    say(I18N.langs[lang].name);
+  } else if (k === 5) { sonOn = !sonOn; store.set('son', sonOn); sound.volume(); say(LW('optSon') + ' ' + L(sonOn ? 'yes' : 'no')); }
+  else if (k === 6) { vibOn = !vibOn; store.set('vib', vibOn); say(LW('optVib') + ' ' + L(vibOn ? 'yes' : 'no')); }
+  else if (k === 7) { mouvOn = !mouvOn; store.set('mouvement', mouvOn); say(LW('optMouv') + ' ' + L(mouvOn ? 'yes' : 'no')); }
+  else if (k === OPT_RETOUR) { goTitle(); say(L('sMenu')); }
+  optDerniere = k; optDerniereT = t;
+  haptics.tick();
 }
 
 // ---------- partie ----------
